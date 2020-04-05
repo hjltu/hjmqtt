@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-config.py
+rpi_serial.py
 """
 
 import os
@@ -13,12 +13,12 @@ def get_serial():
             for line in f:
                 if 'Serial' in line:
                     sn = str(line[10:26])
-                    print('sn',sn)
+                    print('serial number found:',sn)
                     os.environ['SERIAL'] = sn
                     return sn
+            print('serial number not found in /proc/cpuinfo file')
             return "SN"
     except Exception as e:
-        return "ERR:" + str(e)
+        return "ger serial ERR:" + str(e)
 
-
-SERIAL = get_serial()
+serial = get_serial()

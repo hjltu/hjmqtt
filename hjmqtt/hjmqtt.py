@@ -27,27 +27,34 @@ DEALINGS IN THE SOFTWARE.
 import os,sys,time,datetime
 import _thread,threading
 import json
-import config
+import statdb, csv2list
+import accessory, accessoryknx, accessoryiport
+
+from rpi_serial import serial as SERIAL
+import inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+try:
+    from config.hjmqtt import MQTT_SERVER, VERSION
+except:
+    MQTT_SERVER = 'localhost'
+    VERSION = '5-apr-20'
 
 try:
     import paho.mqtt.client as mqtt
 except:
     print('paho-mqtt Err!')
     sys.exit(1)
-import statdb, csv2list
-import accessory, accessoryknx, accessoryiport
 
-
-VERSION="4-aug-19"
-SERIAL = config.SERIAL
 
 """ create accessories
 """
-csv_file = os.environ['HOME']+'/'+SERIAL+'.csv'
+csv_file = os.environ['HOME']+'/config/'+SERIAL+'.csv'
 acc_list = csv2list.main(csv_file)
 #print(type(acc_list))
 if type(acc_list) is not list:
-    csv_file = os.environ['HOME']+'/file.csv'
+    csv_file = os.environ['HOME']+'/setup/default.csv'
     acc_list = csv2list.main(csv_file)
 
 acc_obj = []
@@ -224,7 +231,11 @@ def usage():
 
 client = mqtt.Client()
 #client.connect("192.168.0.10",1883,3600)
-client.connect("localhost",1883,3600)
+try:
+    client.connect(MQTT_SERVER, 1883, 3600)
+except Exception as e:
+    print('Mqtt server ERR:', e)
+    sys.exit(1)
 #client.connect("192.168.1.2",1883,60)
 client.publish("/paho/out", 'start');
 client.on_connect = on_connect
