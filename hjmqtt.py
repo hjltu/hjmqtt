@@ -30,16 +30,12 @@ import json
 import statdb, csv2list
 import accessory, accessoryknx, accessoryiport
 
-from rpi_serial import serial as SERIAL
 import inspect
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-try:
-    from config.hjmqtt import MQTT_SERVER, VERSION
-except:
-    MQTT_SERVER = 'localhost'
-    VERSION = '5-apr-20'
+from config.hjmqtt import MQTT_SERVER, VERSION
+from setup.rpi_serial import serial as SERIAL
 
 try:
     import paho.mqtt.client as mqtt
@@ -50,11 +46,12 @@ except:
 
 """ create accessories
 """
+print(f'Read {SERIAL}.csv')
 csv_file = os.environ['HOME']+'/config/'+SERIAL+'.csv'
 acc_list = csv2list.main(csv_file)
-#print(type(acc_list))
-if type(acc_list) is not list:
-    csv_file = os.environ['HOME']+'/setup/default.csv'
+if not isinstance(acc_list, list):
+    print("Read default.csv")
+    csv_file = os.environ['HOME']+'/config/default.csv'
     acc_list = csv2list.main(csv_file)
 
 acc_obj = []
@@ -122,7 +119,7 @@ for acc in acc_list:
 
     acc_obj.append(obj)
 
-print('len', len(acc_obj))
+print('Accessories found:', len(acc_obj))
 
 
 def cleanJson(msg):
