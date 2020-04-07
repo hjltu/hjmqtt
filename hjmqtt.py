@@ -34,7 +34,7 @@ import inspect
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from config.hjmqtt import MQTT_SERVER, VERSION
+from config.hjhome import MQTT_SERVER, VERSION
 from setup.rpi_serial import serial as SERIAL
 
 try:
