@@ -108,7 +108,7 @@ class Short(Start):
             except:
                     dpt = "9"
             for comm in self.comm:
-                if comm[0] is "/":
+                if comm[0] == "/":
                     out += (comm, int(val))
                 else:
                     out += ("/knx/in",'{"dstgad":"'+comm+'","value":"'+val+'","dpt":"'+dpt+'"}')
@@ -128,7 +128,7 @@ class Scene(Short):
             if msg["value"] == "1":
                 val = str(self.stat1)
             for comm in self.comm:
-                if comm[0] is "/":
+                if comm[0] == "/":
                     out += (comm, int(val))
                 else:
                     out += ("/knx/in",'{"dstgad":"'+comm+'","value":"'+val+'","dpt":"5"}')

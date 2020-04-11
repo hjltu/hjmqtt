@@ -138,7 +138,7 @@ class Short(Start):
             out=()
             statdb.insert(self.name, val)
             for comm in self.comm:
-                if comm[0] is "/":
+                if comm[0] == "/":
                     out+=(comm, val)
                 else:
                     out += ("/knx/in",'{"dstgad":"'+comm+'","value":"'+str(val)+'","dpt":"1"}')
@@ -157,7 +157,7 @@ class Scene(Short):
                 statdb.insert(self.name, 0)
                 val=self.stat1
             for comm in self.comm:
-                if comm[0] is "/":
+                if comm[0] == "/":
                     out+=(comm, val)
                 else:
                     out += ("/knx/in",'{"dstgad":"'+comm+'","value":"'+str(val)+'","dpt":"5"}')

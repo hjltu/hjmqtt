@@ -227,6 +227,7 @@ def usage():
     print(__doc__)
 
 client = mqtt.Client()
+print("Try to connect to MQTT server:", MQTT_SERVER)
 #client.connect("192.168.0.10",1883,3600)
 try:
     client.connect(MQTT_SERVER, 1883, 3600)
